@@ -1,0 +1,107 @@
+/* Global Styles */
+
+/* Root Styles */
+:root {
+  --background-color: #ffffff;
+  --text-color: #333333;
+  --highlight-color: #007aff; /* iOS Blue */
+  --secondary-background: #f5f5f7; /* Light gray background */
+  --border-radius: 12px; /* Rounded corners */
+  --shadow-color: rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+/* About Me Section */
+.about-me-section {
+  padding: 2rem;
+  background-color: var(--secondary-background);
+  border-radius: var(--border-radius);
+  box-shadow: 0 2px 10px var(--shadow-color);
+  margin: 2rem auto;
+  max-width: 800px;
+  text-align: center;
+}
+
+/* About Me Container */
+.about-me-container {
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* About Me Title */
+.about-me-title {
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--text-color);
+  margin-bottom: 0.75rem;
+  line-height: 1.2;
+}
+
+/* About Me Description */
+.about-me-description {
+  color: #636366;
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+/* Highlighted Text */
+.highlight {
+  color: var(--highlight-color);
+}
+
+/* About Me List */
+.about-me-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  color: #636366;
+  margin-bottom: 2rem;
+}
+
+.about-me-list li {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+/* Buttons */
+.about-me-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.about-me-buttons button {
+  border-radius: var(--border-radius);
+  border: 1px solid var(--highlight-color);
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: transparent;
+  color: var(--highlight-color);
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.about-me-buttons button:hover {
+  background-color: var(--highlight-color);
+  color: white;
+}
+
+/* Responsive Design: Adjust section padding and font size on smaller screens */
+@media (max-width: 768px) {
+  .about-me-section {
+    padding: 1.5rem;
+    margin: 1rem;
+  }
+
+  .about-me-title {
+    font-size: 1.5rem;
+  }
+
+  .about-me-description {
+    font-size: 0.9rem;
+  }
+}
