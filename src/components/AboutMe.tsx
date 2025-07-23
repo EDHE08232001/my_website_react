@@ -12,10 +12,14 @@ const AboutMe: React.FC = () => {
         </p>
         <ul className="about-me-list">
           <li>
-            <strong>MASc Admission:</strong> Admitted to MASc ECE (Applied AI), University of Ottawa (Jan 2026).
+            <span>
+              <strong>MASc Admission:</strong> Admitted to MASc ECE (Applied AI), University of Ottawa (Jan 2026).
+            </span>
           </li>
           <li>
-            <strong>Graduate Funding:</strong> Awarded $7,500 Admission Scholarship (3 terms), $18,000 Research Support, $12,000 TAship over 2 years.
+            <span>
+              <strong>Graduate Funding:</strong> Awarded $7,500 Admission Scholarship (3 terms), $18,000 Research Support, $12,000 TAship over 2 years.
+            </span>
           </li>
         </ul>
         <div className="about-me-buttons">
