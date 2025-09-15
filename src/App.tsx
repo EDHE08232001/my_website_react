@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 import Home from "@/pages/Home";
 import Work from "@/pages/Work";
 import ScrollToHash from "@/components/ScrollToHash";
+import Chatbot from "@/components/Chatbot";
 
 const App: React.FC = () => (
   <div className="min-h-screen bg-gradient-to-br from-blue-100 via-white to-purple-100 text-gray-800 font-sans">
@@ -11,6 +12,7 @@ const App: React.FC = () => (
       <Route path="/" element={<Home />} />
       <Route path="/work" element={<Work />} />
     </Routes>
+    <Chatbot />
   </div>
 );
 
