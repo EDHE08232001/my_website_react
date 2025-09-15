@@ -6,25 +6,25 @@ const projectList = [
         title: "CUDA Glow Effect",
         description:
             "High-performance image and video processing app featuring dynamic glow effects. Utilized CUDA Graphs to optimize segmentation inference and designed a parallel mipmap pipeline with triple buffering for real-time performance.",
-        tech: ["CUDA", "TensorRT", "OpenCV"]
+        repoLink: "https://github.com/EDHE08232001/GlowEffect"
     },
     {
         title: "Course Booking App",
         description:
             "Android application for scheduling and account management with a dynamic UI. Employed JUnit for testing to ensure reliability and maintainability.",
-        tech: ["Java", "SQL", "Android Studio"]
+        repoLink: "https://github.com/EDHE08232001/student-course-booking-app"
     },
     {
         title: "Hotel Database Management System",
         description:
             "Hotel management system with a PostgreSQL backend, automated tasks using triggers, and responsive front-end utilities for real-time operations.",
-        tech: ["Java", "HTML", "JSP", "PostgreSQL"]
+        repoLink: "https://github.com/EDHE08232001/CSI2132_Project"
     },
     {
         title: "Stopwatch App",
         description:
             "React-based stopwatch featuring modern state management with hooks. Built test suites with React Testing Library and Jest for robust reliability.",
-        tech: ["React", "JavaScript", "CSS"]
+        repoLink: "https://github.com/EDHE08232001/InternAssessmentSolution"
     }
 ];
 
@@ -40,6 +40,7 @@ const Projects: React.FC = () => (
                         key={idx}
                         title={p.title}
                         description={p.description}
+                        repoLink={p.repoLink}
                     />
                 ))}
             </div>
