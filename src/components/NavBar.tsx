@@ -14,6 +14,13 @@ const NavBar: React.FC = () => {
                     <a href="#about" className="hover:text-purple-500 transition-colors">About</a>
                     <a href="#projects" className="hover:text-purple-500 transition-colors">Projects</a>
                     <a href="#contact" className="hover:text-purple-500 transition-colors">Contact</a>
+                    <a
+                        href="/Edward_He_s_Resume.pdf"
+                        download
+                        className="hover:text-purple-500 transition-colors"
+                    >
+                        Resume
+                    </a>
                 </div>
                 <button className="md:hidden" onClick={toggleMenu}>
                     {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -24,6 +31,13 @@ const NavBar: React.FC = () => {
                     <a href="#about" className="block hover:text-purple-500 transition-colors">About</a>
                     <a href="#projects" className="block hover:text-purple-500 transition-colors">Projects</a>
                     <a href="#contact" className="block hover:text-purple-500 transition-colors">Contact</a>
+                    <a
+                        href="/Edward_He_s_Resume.pdf"
+                        download
+                        className="block hover:text-purple-500 transition-colors"
+                    >
+                        Resume
+                    </a>
                 </div>
             )}
         </>
