@@ -3,7 +3,6 @@ import { MessageCircle } from 'lucide-react';
 
 /**
  * Basic chat message structure used throughout the widget.
- * `role` distinguishes between messages from the user and the assistant.
  */
 interface Message {
     role: 'user' | 'assistant';
@@ -19,22 +18,27 @@ const Chatbot: React.FC = () => {
     const [streamingText, setStreamingText] = useState(''); // live typing buffer
     const [isStreaming, setIsStreaming] = useState(false);
 
-    const toggleChat = () => setIsOpen((prev) => !prev);
+    const toggleChat = () => setIsOpen(prev => !prev);
 
     const sendMessage = async () => {
         if (!input.trim()) return;
 
-        // Create a typed user message so TypeScript retains literal types.
-        const userMessage: Message = { role: 'user', content: input };
-        const newMessages: Message[] = [...messages, userMessage];
-
+        // --- 1️⃣ Show user’s raw input in the UI ---
+        const displayMsg: Message = { role: 'user', content: input };
+        const newMessages = [...messages, displayMsg];
         setMessages(newMessages);
         setInput('');
         setStreamingText('');
         setIsStreaming(true);
 
-        // prepare only the last 5 interactions to send for context
-        const chatHistory = newMessages.slice(-5);
+        // --- 2️⃣ Send a hidden hint to the backend ---
+        const apiMsg: Message = {
+            role: 'user',
+            content: `${input} (Give brief answer)`
+        };
+
+        // only last 5 interactions (including this modified one) for context
+        const chatHistory = [...messages, apiMsg].slice(-5);
 
         try {
             const response = await fetch(API_URL, {
@@ -46,35 +50,31 @@ const Chatbot: React.FC = () => {
             const data = await response.json();
             const fullReply: string = data.reply;
 
-            // ---- stream word-by-word like ChatGPT ----
+            // --- 3️⃣ Stream the assistant’s reply word-by-word ---
             const words = fullReply.split(/\s+/);
             let index = 0;
 
             const interval = setInterval(() => {
-                setStreamingText((prev) =>
+                setStreamingText(prev =>
                     prev + (prev ? ' ' : '') + words[index]
                 );
                 index += 1;
                 if (index >= words.length) {
                     clearInterval(interval);
                     setIsStreaming(false);
-                    // finally commit the full assistant message to messages[]
-                    setMessages((prev) => [
+                    setMessages(prev => [
                         ...prev,
                         { role: 'assistant', content: fullReply },
                     ]);
                     setStreamingText('');
                 }
-            }, 80); // adjust speed (ms) to taste
+            }, 80); // adjust typing speed (ms) to taste
         } catch {
             setIsStreaming(false);
-
-            // Append an error message if the request fails.
-            const errorMessage: Message = {
-                role: 'assistant',
-                content: 'Error connecting to server.',
-            };
-            setMessages([...newMessages, errorMessage]);
+            setMessages([
+                ...newMessages,
+                { role: 'assistant', content: 'Error connecting to server.' },
+            ]);
         }
     };
 
@@ -83,7 +83,7 @@ const Chatbot: React.FC = () => {
         await sendMessage();
     };
 
-    // When minimized – floating button bottom right
+    // --- Minimized floating button ---
     if (!isOpen) {
         return (
             <button
@@ -96,12 +96,58 @@ const Chatbot: React.FC = () => {
         );
     }
 
-    // Expanded chat window – enlarged dimensions
+    // --- Expanded chat window ---
     return (
         <div className="fixed bottom-6 right-6 w-[28rem] h-[36rem] bg-white rounded-xl shadow-2xl flex flex-col">
             <div className="flex justify-between items-center p-3 border-b">
-                {/* ... rest of the component remains unchanged ... */}
+                <span className="font-bold text-lg">Chatbot</span>
+                <button
+                    onClick={toggleChat}
+                    className="text-gray-500 hover:text-gray-700 text-xl"
+                    aria-label="Minimize chat"
+                >
+                    &times;
+                </button>
             </div>
+
+            <div className="flex-1 overflow-y-auto p-3 space-y-3">
+                {messages.map((msg, idx) => (
+                    <div
+                        key={idx}
+                        className={`text-sm p-2 rounded-xl max-w-[80%] ${
+                            msg.role === 'user'
+                                ? 'bg-blue-100 ml-auto text-right'
+                                : 'bg-gray-100 mr-auto'
+                        }`}
+                    >
+                        {msg.content}
+                    </div>
+                ))}
+
+                {/* live typing effect */}
+                {isStreaming && (
+                    <div className="text-sm p-2 rounded-xl max-w-[80%] bg-gray-100 mr-auto">
+                        {streamingText}
+                        <span className="animate-pulse">▌</span>
+                    </div>
+                )}
+            </div>
+
+            <form onSubmit={handleSubmit} className="p-3 border-t flex">
+                <input
+                    type="text"
+                    value={input}
+                    onChange={e => setInput(e.target.value)}
+                    placeholder="Type a message..."
+                    className="flex-1 border rounded p-2 text-sm"
+                />
+                <button
+                    type="submit"
+                    className="ml-2 px-4 py-2 bg-blue-600 text-white rounded"
+                >
+                    Send
+                </button>
+            </form>
         </div>
     );
 };
