@@ -1,9 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MessageCircle } from 'lucide-react';
-
-// -------------------------------
-// Chatbot Widget – Bottom Right + Last 5 Messages
-// -------------------------------
 
 interface Message {
     role: 'user' | 'assistant';
@@ -16,6 +12,8 @@ const Chatbot: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState<Message[]>([]);
     const [input, setInput] = useState('');
+    const [streamingText, setStreamingText] = useState(''); // live typing buffer
+    const [isStreaming, setIsStreaming] = useState(false);
 
     const toggleChat = () => setIsOpen((prev) => !prev);
 
@@ -25,26 +23,43 @@ const Chatbot: React.FC = () => {
         const newMessages = [...messages, { role: 'user', content: input }];
         setMessages(newMessages);
         setInput('');
+        setStreamingText('');
+        setIsStreaming(true);
 
-        // prepare only the last 5 interactions to send for context
         const chatHistory = newMessages.slice(-5);
 
         try {
             const response = await fetch(API_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    // pass the whole last-5 chat history to backend
-                    messages: chatHistory,
-                }),
+                body: JSON.stringify({ messages: chatHistory }),
             });
 
             const data = await response.json();
-            setMessages([
-                ...newMessages,
-                { role: 'assistant', content: data.reply },
-            ]);
+            const fullReply: string = data.reply;
+
+            // ---- stream word-by-word like ChatGPT ----
+            const words = fullReply.split(/\s+/);
+            let index = 0;
+
+            const interval = setInterval(() => {
+                setStreamingText((prev) =>
+                    prev + (prev ? ' ' : '') + words[index]
+                );
+                index += 1;
+                if (index >= words.length) {
+                    clearInterval(interval);
+                    setIsStreaming(false);
+                    // finally commit the full assistant message to messages[]
+                    setMessages((prev) => [
+                        ...prev,
+                        { role: 'assistant', content: fullReply },
+                    ]);
+                    setStreamingText('');
+                }
+            }, 80); // adjust speed (ms) to taste
         } catch {
+            setIsStreaming(false);
             setMessages([
                 ...newMessages,
                 { role: 'assistant', content: 'Error connecting to server.' },
@@ -70,24 +85,24 @@ const Chatbot: React.FC = () => {
         );
     }
 
-    // Expanded chat window bottom right
+    // Expanded chat window – enlarged dimensions
     return (
-        <div className="fixed bottom-4 right-4 w-80 h-96 bg-white rounded-lg shadow-lg flex flex-col">
-            <div className="flex justify-between items-center p-2 border-b">
-                <span className="font-bold">Chatbot</span>
+        <div className="fixed bottom-6 right-6 w-[28rem] h-[36rem] bg-white rounded-xl shadow-2xl flex flex-col">
+            <div className="flex justify-between items-center p-3 border-b">
+                <span className="font-bold text-lg">Chatbot</span>
                 <button
                     onClick={toggleChat}
-                    className="text-gray-500 hover:text-gray-700"
+                    className="text-gray-500 hover:text-gray-700 text-xl"
                     aria-label="Minimize chat"
                 >
                     &times;
                 </button>
             </div>
-            <div className="flex-1 overflow-y-auto p-2 space-y-2">
+            <div className="flex-1 overflow-y-auto p-3 space-y-3">
                 {messages.map((msg, idx) => (
                     <div
                         key={idx}
-                        className={`text-sm p-2 rounded max-w-[75%] ${msg.role === 'user'
+                        className={`text-sm p-2 rounded-xl max-w-[80%] ${msg.role === 'user'
                                 ? 'bg-blue-100 ml-auto text-right'
                                 : 'bg-gray-100 mr-auto'
                             }`}
@@ -95,18 +110,26 @@ const Chatbot: React.FC = () => {
                         {msg.content}
                     </div>
                 ))}
+
+                {/* live typing effect */}
+                {isStreaming && (
+                    <div className="text-sm p-2 rounded-xl max-w-[80%] bg-gray-100 mr-auto">
+                        {streamingText}
+                        <span className="animate-pulse">▌</span>
+                    </div>
+                )}
             </div>
-            <form onSubmit={handleSubmit} className="p-2 border-t flex">
+            <form onSubmit={handleSubmit} className="p-3 border-t flex">
                 <input
                     type="text"
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     placeholder="Type a message..."
-                    className="flex-1 border rounded p-1 text-sm"
+                    className="flex-1 border rounded p-2 text-sm"
                 />
                 <button
                     type="submit"
-                    className="ml-2 px-3 py-1 bg-blue-600 text-white rounded"
+                    className="ml-2 px-4 py-2 bg-blue-600 text-white rounded"
                 >
                     Send
                 </button>
