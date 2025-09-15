@@ -40,7 +40,6 @@ const Projects: React.FC = () => (
                         key={idx}
                         title={p.title}
                         description={p.description}
-                        tech={p.tech}
                     />
                 ))}
             </div>
