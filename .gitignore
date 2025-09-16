@@ -25,3 +25,6 @@ dist-ssr
 
 # shitty system generated files
 ._*
+
+# ignore secrets
+.env*
