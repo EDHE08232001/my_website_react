@@ -14,7 +14,7 @@ const certifications: Certification[] = [
   {
     title: "Microsoft Azure Fundamentals (AZ-900)",
     issuer: "Microsoft",
-    issued: "2024",
+    issued: "2023",
     description: [
       "Demonstrated foundational knowledge of cloud concepts.",
       "Understanding of Azure services, pricing, and governance.",
