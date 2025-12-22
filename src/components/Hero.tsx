@@ -23,12 +23,22 @@ const Hero: React.FC = () => {
             >
                 A passionate Computer Science student and future innovator. Let's build something amazing together.
             </motion.p>
-            <Button
-                className="px-6 py-3 bg-purple-600 text-white rounded-2xl shadow-lg hover:bg-purple-700 transition-transform transform hover:scale-105"
-                onClick={() => navigate('/work')}
-            >
-                View My Work
-            </Button>
+            <div className="flex flex-col sm:flex-row gap-4">
+                <Button
+                    className="px-6 py-3 bg-purple-600 text-white rounded-2xl shadow-lg hover:bg-purple-700 transition-transform transform hover:scale-105"
+                    onClick={() => navigate('/work')}
+                >
+                    View My Work
+                </Button>
+
+                <Button
+                    className="px-6 py-3 bg-purple-600 text-white rounded-2xl shadow-lg hover:bg-purple-700 transition-transform transform hover:scale-105"
+                    onClick={() => navigate('/certifications')}
+                >
+                    View My Certifications
+                </Button>
+            </div>
+
         </section>
     );
 };
