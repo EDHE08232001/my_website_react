@@ -13,6 +13,7 @@ const NavBar: React.FC = () => {
                 <div className="text-2xl font-bold text-purple-700">My Portfolio</div>
                 <div className="hidden md:flex space-x-6 font-medium">
                     {/* Use absolute paths so links work even from the work experience page */}
+                    <Link to="/#hero" className="hover:text-purple-500 transition-colors">Home</Link>
                     <Link to="/#about" className="hover:text-purple-500 transition-colors">About</Link>
                     <Link to="/#projects" className="hover:text-purple-500 transition-colors">Projects</Link>
                     <Link to="/#contact" className="hover:text-purple-500 transition-colors">Contact</Link>
@@ -31,6 +32,7 @@ const NavBar: React.FC = () => {
             {isOpen && (
                 <div className="md:hidden bg-white/90 backdrop-blur-md px-6 py-4 space-y-4 fixed top-16 w-full shadow-md z-40">
                     {/* Mobile menu uses the same links for cross-page navigation */}
+                    <Link to="/#hero" className="block hover:text-purple-500 transition-colors">Home</Link>
                     <Link to="/#about" className="block hover:text-purple-500 transition-colors">About</Link>
                     <Link to="/#projects" className="block hover:text-purple-500 transition-colors">Projects</Link>
                     <Link to="/#contact" className="block hover:text-purple-500 transition-colors">Contact</Link>

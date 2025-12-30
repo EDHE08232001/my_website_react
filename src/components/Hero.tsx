@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 const Hero: React.FC = () => {
     const navigate = useNavigate();
     return (
-        <section className="flex flex-col items-center justify-center text-center min-h-screen px-6">
+        <section id="hero" className="flex flex-col items-center justify-center text-center min-h-screen px-6">
             <motion.h1
                 className="text-5xl md:text-6xl font-extrabold text-purple-700 mb-4"
                 initial={{ opacity: 0, y: -50 }}
